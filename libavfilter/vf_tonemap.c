@@ -49,8 +49,8 @@ enum TonemapAlgorithm {
     TONEMAP_REINHARD,
     TONEMAP_HABLE,
     TONEMAP_MOBIUS,
-    TONEMAP_MAX,
     TONEMAP_UNCHARTED
+    TONEMAP_MAX,
 };
 
 typedef struct LumaCoefficients {
