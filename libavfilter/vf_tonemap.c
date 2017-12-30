@@ -168,7 +168,7 @@ static float uncharted(float color, float param)
   float E = 0.02;
   float F = 0.30;
   float W = 11.2;
-  float exposure = 2;
+  float exposure = 1.5;
   float gamma = param;
   float white = 0.0;
 
