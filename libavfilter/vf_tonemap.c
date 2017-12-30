@@ -176,7 +176,7 @@ static float uncharted(float color)
   color = ((color * (A * color + C * B) + D * E) / (color * (A * color + B) + D * F)) - E / F;
   white = ((W * (A * W + C * B) + D * E) / (W * (A * W + B) + D * F)) - E / F;
   color /= white;
-  color = pow(color, vec3(1. / gamma));
+  color = pow(color, 1. / gamma);
   return color;
 }
 
