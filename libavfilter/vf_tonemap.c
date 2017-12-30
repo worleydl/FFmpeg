@@ -159,7 +159,7 @@ static float mobius(float in, float j, double peak)
     return (b * b + 2.0f * b * j + j * j) / (b - a) * (in + a) / (in + b);
 }
 
-static float uncharted(float color)
+static float uncharted(float color, float param)
 {
   float A = 0.15;
   float B = 0.50;
@@ -168,8 +168,8 @@ static float uncharted(float color)
   float E = 0.02;
   float F = 0.30;
   float W = 11.2;
-  float exposure = 2.;
-  float gamma = 2.2;
+  float exposure = 2;
+  float gamma = param;
   float white = 0.0;
 
   color *= exposure;
@@ -237,7 +237,7 @@ static void tonemap(TonemapContext *s, AVFrame *out, const AVFrame *in,
         sig = mobius(sig, s->param, peak);
         break;
     case TONEMAP_UNCHARTED:
-        sig = uncharted(sig);
+        sig = uncharted(sig, s->param);
         break; 
     }
 
