@@ -50,6 +50,7 @@ enum TonemapAlgorithm {
     TONEMAP_HABLE,
     TONEMAP_MOBIUS,
     TONEMAP_MAX,
+    TONEMAP_UNCHARTED
 };
 
 typedef struct LumaCoefficients {
@@ -158,6 +159,26 @@ static float mobius(float in, float j, double peak)
     return (b * b + 2.0f * b * j + j * j) / (b - a) * (in + a) / (in + b);
 }
 
+static float uncharted(float color)
+{
+  float A = 0.15;
+  float B = 0.50;
+  float C = 0.10;
+  float D = 0.20;
+  float E = 0.02;
+  float F = 0.30;
+  float W = 11.2;
+  float exposure = 2.;
+  float gamma = 2.2;
+
+  color *= exposure;
+  color = ((color * (A * color + C * B) + D * E) / (color * (A * color + B) + D * F)) - E / F;
+  float white = ((W * (A * W + C * B) + D * E) / (W * (A * W + B) + D * F)) - E / F;
+  color /= white;
+  color = pow(color, vec3(1. / gamma));
+  return color;
+}
+
 #define MIX(x,y,a) (x) * (1 - (a)) + (y) * (a)
 static void tonemap(TonemapContext *s, AVFrame *out, const AVFrame *in,
                     const AVPixFmtDescriptor *desc, int x, int y, double peak)
@@ -214,6 +235,9 @@ static void tonemap(TonemapContext *s, AVFrame *out, const AVFrame *in,
     case TONEMAP_MOBIUS:
         sig = mobius(sig, s->param, peak);
         break;
+    case TONEMAP_UNCHARTED:
+        sig = uncharted(sig);
+        break; 
     }
 
     /* apply the computed scale factor to the color,
@@ -311,6 +335,7 @@ static const AVOption tonemap_options[] = {
     {     "reinhard", 0, 0, AV_OPT_TYPE_CONST, {.i64 = TONEMAP_REINHARD},          0, 0, FLAGS, "tonemap" },
     {     "hable",    0, 0, AV_OPT_TYPE_CONST, {.i64 = TONEMAP_HABLE},             0, 0, FLAGS, "tonemap" },
     {     "mobius",   0, 0, AV_OPT_TYPE_CONST, {.i64 = TONEMAP_MOBIUS},            0, 0, FLAGS, "tonemap" },
+    {     "uncharted",0, 0, AV_OPT_TYPE_CONST, {.i64 = TONEMAP_UNCHARTED},         0, 0, FLAGS, "tonemap" },
     { "param",        "tonemap parameter", OFFSET(param), AV_OPT_TYPE_DOUBLE, {.dbl = NAN}, DBL_MIN, DBL_MAX, FLAGS },
     { "desat",        "desaturation strength", OFFSET(desat), AV_OPT_TYPE_DOUBLE, {.dbl = 2}, 0, DBL_MAX, FLAGS },
     { "peak",         "signal peak override", OFFSET(peak), AV_OPT_TYPE_DOUBLE, {.dbl = 0}, 0, DBL_MAX, FLAGS },
