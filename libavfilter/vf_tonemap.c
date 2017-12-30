@@ -170,10 +170,11 @@ static float uncharted(float color)
   float W = 11.2;
   float exposure = 2.;
   float gamma = 2.2;
+  float white = 0.0;
 
   color *= exposure;
   color = ((color * (A * color + C * B) + D * E) / (color * (A * color + B) + D * F)) - E / F;
-  float white = ((W * (A * W + C * B) + D * E) / (W * (A * W + B) + D * F)) - E / F;
+  white = ((W * (A * W + C * B) + D * E) / (W * (A * W + B) + D * F)) - E / F;
   color /= white;
   color = pow(color, vec3(1. / gamma));
   return color;
