@@ -173,7 +173,7 @@ static float uncharted(float color, float param)
   float gamma = param;
   float white = 0.0;
 
-  color *= reduce;
+  //color *= reduce;
   color *= exposure;
   color = ((color * (A * color + C * B) + D * E) / (color * (A * color + B) + D * F)) - E / F;
   white = ((W * (A * W + C * B) + D * E) / (W * (A * W + B) + D * F)) - E / F;
