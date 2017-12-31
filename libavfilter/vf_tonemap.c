@@ -168,10 +168,12 @@ static float uncharted(float color, float param)
   float E = 0.02;
   float F = 0.30;
   float W = 11.2;
-  float exposure = 1.5;
+  float exposure = 2.0;
+  float reduce = 0.50;
   float gamma = param;
   float white = 0.0;
 
+  color *= reduce;
   color *= exposure;
   color = ((color * (A * color + C * B) + D * E) / (color * (A * color + B) + D * F)) - E / F;
   white = ((W * (A * W + C * B) + D * E) / (W * (A * W + B) + D * F)) - E / F;
